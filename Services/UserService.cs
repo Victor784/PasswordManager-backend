@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PassMngr.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity.Data;
+using PassMngr.Helpers;
 
 namespace PassMngr.Services
 {
@@ -12,10 +14,11 @@ namespace PassMngr.Services
     public class UserService : ControllerBase
     {
         private readonly UserRepository repository;
-
+        private readonly UsersManager userManager;
         public UserService(IRepository<User> repo) 
         {
             repository = (UserRepository)repo;
+            userManager = new UsersManager();
         }
 
         [HttpGet("")]
@@ -68,5 +71,36 @@ namespace PassMngr.Services
             return NoContent();
         }
 
+        [HttpPost("auth")]
+        [EnableCors("PassMngrPolicy")]
+        public async Task<IActionResult> AuthenticateAsync([FromBody] LoginRequest model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            bool isAuthenticated = await AuthenticateUserAsync(model.Email, model.Password);
+
+            if (isAuthenticated)
+            {
+                return Ok(new { Message = "Authentication successful" });
+            }
+            else
+            {
+                return Unauthorized(new { Message = "Invalid email or password" });
+            }
+        }
+
+        private async Task<bool> AuthenticateUserAsync(string email, string password)
+        {
+            bool matchesDBEntry = await userManager.MatchDBEntry(email, password, repository.GetAll());
+            return matchesDBEntry ? true : false;
+        }
+
+        }
+    public class LoginRequest
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }
