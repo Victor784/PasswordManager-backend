@@ -83,7 +83,8 @@ namespace PassMngr.Services
 
             if (isAuthenticated)
             {
-                return Ok(new { Message = "Authentication successful" });
+                int userId = 123;
+                return Ok(new { Message = "Authentication successful", UserId = userId });
             }
             else
             {
