@@ -38,7 +38,7 @@ namespace PassMngr.Services
             return user;
         }
 
-        [HttpPost("{id}")]
+        [HttpPost]
         [EnableCors("PassMngrPolicy")]
         public ActionResult<User> Create(User user)
         {
