@@ -24,12 +24,20 @@ namespace PassMngr.Services
             }
         }
 
-        public string addPepper(string password)
+        public string addPepper(string password, string pepper = "")
         {
-            Random random = new Random();
-            int randomIndex = random.Next(0, pepperList.Count);
+            string randomPepper;
+            if (pepper == "")
+            {
+                Random random = new Random();
+                int randomIndex = random.Next(0, pepperList.Count);
 
-            string randomPepper = pepperList[randomIndex];
+                randomPepper = pepperList[randomIndex];
+            }
+            else 
+            {
+                randomPepper = pepper;
+            }
 
             return password + randomPepper;
         }
@@ -48,5 +56,11 @@ namespace PassMngr.Services
                 return builder.ToString();
             }
         }
+
+        public List<string> getAllPeppers()
+        {
+            return pepperList;
+        }
+
     }
 }

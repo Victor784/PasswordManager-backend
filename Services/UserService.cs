@@ -97,8 +97,17 @@ namespace PassMngr.Services
 
         private async Task<bool> AuthenticateUserAsync(string email, string password)
         {
-            bool matchesDBEntry = await userManager.MatchDBEntry(email, password, repository.GetAll());
-            return matchesDBEntry ? true : false;
+            HashingService hashingService = new HashingService();
+            List<string> peppers = hashingService.getAllPeppers();
+            bool matchesDBEntry = false;
+            foreach (string pepper in peppers)
+            {
+                var hashedPassword = hashingService.HashString(hashingService.addPepper(password, pepper));
+                matchesDBEntry = await userManager.MatchDBEntry(email, hashedPassword, repository.GetAll());
+                if (matchesDBEntry)
+                    return true;
+            }          
+            return false;
         }
 
         }
