@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PassMngr.DBContext;
 using PassMngr.Models;
 using PassMngr.Repository;
+using PassMngr.Services;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);

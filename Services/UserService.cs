@@ -43,6 +43,8 @@ namespace PassMngr.Services
         public ActionResult<User> Create(User user)
         {
             user.id = repository.GetAll().Count() + 1;
+            HashingService hashingService = new HashingService();
+            user.password = hashingService.HashString(hashingService.addPepper(user.password));
             repository.Add(user);
 
             return CreatedAtAction(nameof(GetById), new { id = user.id }, user);
@@ -83,6 +85,7 @@ namespace PassMngr.Services
 
             if (isAuthenticated)
             {
+                //TODO fix this here you should get get the actual id of the user
                 int userId = 123;
                 return Ok(new { Message = "Authentication successful", UserId = userId });
             }

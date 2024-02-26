@@ -2,6 +2,7 @@
 using PassMngr.Models;
 using static System.Net.Mime.MediaTypeNames;
 using PassMngr.DBContext;
+using PassMngr.Services;
 
 namespace PassMngr.Repository
 {
