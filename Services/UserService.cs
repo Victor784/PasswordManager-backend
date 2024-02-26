@@ -86,8 +86,11 @@ namespace PassMngr.Services
             if (isAuthenticated)
             {
                 //TODO fix this here you should get get the actual id of the user
-                int userId = 123;
-                return Ok(new { Message = "Authentication successful", UserId = userId });
+                int userId = repository.getByEmail(model.Email).id;
+                if(userId != null)
+                    return Ok(new { Message = "Authentication successful", UserId = userId });
+                else
+                    return BadRequest(new { Message = "Authentication failed" });
             }
             else
             {

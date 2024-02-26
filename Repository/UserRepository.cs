@@ -28,6 +28,16 @@ namespace PassMngr.Repository
             }
             return null;
         }
+
+        public User? getByEmail(string email)
+        {
+            var user = _context.Users.FirstOrDefault(t => t.email == email);
+            if (user != null)
+            {
+                return user;
+            }
+            return null;
+        }
         public void Delete(User entity) 
         {
             _context.Users.Remove(entity);
