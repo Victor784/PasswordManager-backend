@@ -20,9 +20,12 @@ namespace PassMngr.Services
 
         [HttpGet]
         [EnableCors("PassMngrPolicy")]
-        public ActionResult<IEnumerable<Password>> getUsers()
+        public ActionResult<IEnumerable<Password>> getPasswords()
         {
-            return repository.GetAll();
+            var allPasswords = repository.GetAll();
+            EncryptionService encryptService = new EncryptionService();
+            allPasswords.ForEach(pass => pass.password_value = encryptService.DecryptString(pass.password_value));
+            return allPasswords;
         }
 
         [HttpGet("{id}")]
@@ -40,6 +43,8 @@ namespace PassMngr.Services
         public ActionResult<Password> Create(Password pass)
         {
             pass.id = repository.GetAll().Count() + 1;
+            EncryptionService encryptService = new EncryptionService();
+            pass.password_value = encryptService.EncryptString(pass.password_value);
             repository.Add(pass);
 
             return CreatedAtAction(nameof(GetById), new { id = pass.id }, pass);
