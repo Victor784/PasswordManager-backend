@@ -104,7 +104,7 @@ namespace PassMngr.Services
             List<string> peppers = hashingService.getAllPeppers();
             bool matchesDBEntry = false;
             //TODO: delete this after testing is done
-            if (email == "test") 
+            if (email == "test" || email == "test1") 
                 return true;
             foreach (string pepper in peppers)
             {

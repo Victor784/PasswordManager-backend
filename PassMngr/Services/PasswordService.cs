@@ -18,18 +18,19 @@ namespace PassMngr.Services
             repository = (PasswordRepository)repo;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [EnableCors("PassMngrPolicy")]
-        public ActionResult<IEnumerable<Password>> getPasswords()
+        public ActionResult<IEnumerable<Password>> getPasswords(int id)
         {
-            var allPasswords = repository.GetAll();
-            EncryptionService encryptService = new EncryptionService();
-            allPasswords.ForEach(pass => pass.password_value = encryptService.DecryptString(pass.password_value));
+            var allPasswords = repository.GetAll().Where(pass => pass.user_id == id).ToList();
+            //TODO uncomment this after testing is done
+            //EncryptionService encryptService = new EncryptionService();
+            //allPasswords.ForEach(pass => pass.password_value = encryptService.DecryptString(pass.password_value));
             return allPasswords;
         }
 
-        [HttpGet("{id}")]
-        [EnableCors("PassMngrPolicy")]
+        //[HttpGet("{id}")]
+        //[EnableCors("PassMngrPolicy")]
         public ActionResult<Password> GetById(int id)
         {
             var pass = repository.GetById(id);
