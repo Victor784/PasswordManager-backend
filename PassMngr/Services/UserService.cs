@@ -6,6 +6,7 @@ using PassMngr.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity.Data;
 using PassMngr.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace PassMngr.Services
 {
@@ -77,7 +78,8 @@ namespace PassMngr.Services
         [EnableCors("PassMngrPolicy")]
         public async Task<IActionResult> AuthenticateAsync([FromBody] LoginRequest model)
         {
-            if (!ModelState.IsValid)
+            //TODO Delete the model.Email != "test" && model.Password != "test"
+            if (!ModelState.IsValid && model.Email != "test" && model.Password != "test")
             {
                 return BadRequest(ModelState);
             }
@@ -85,7 +87,7 @@ namespace PassMngr.Services
 
             if (isAuthenticated)
             {
-                //TODO fix this here you should get get the actual id of the user
+           
                 int userId = repository.getByEmail(model.Email).id;
                 if(userId != null)
                     return Ok(new { Message = "Authentication successful", UserId = userId });
@@ -119,7 +121,11 @@ namespace PassMngr.Services
         }
     public class LoginRequest
     {
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
 }
