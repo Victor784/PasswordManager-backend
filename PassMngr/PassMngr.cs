@@ -4,6 +4,7 @@ using PassMngr.Models;
 using PassMngr.Repository;
 using PassMngr.Services;
 using System.Net;
+using Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<Password>, PasswordRepository>();
+builder.Services.AddSingleton<LoggerService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PassMngrPolicy",

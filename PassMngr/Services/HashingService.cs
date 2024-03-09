@@ -1,15 +1,17 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
+using Logger;
 
 namespace PassMngr.Services
 {
     public class HashingService
     {
         private List<string> pepperList;
-        public HashingService()
+        private readonly LoggerService logger;
+        public HashingService(LoggerService logger)
         {
             pepperList = new List<string>();
-
+            this.logger = logger;
             try
             {
                 string filePath = "../pepperList.txt";
@@ -44,6 +46,7 @@ namespace PassMngr.Services
 
         public string HashString(string input)
         {
+            logger.Log("HashingService : HashString");
             using (SHA256 sha256Hash = SHA256.Create())
             {
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));

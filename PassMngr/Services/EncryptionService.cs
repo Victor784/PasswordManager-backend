@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,7 +9,12 @@ namespace PassMngr.Services
     public class EncryptionService
     {
         private static string EncryptKey;
+        private readonly LoggerService logger;
 
+        public EncryptionService(LoggerService logger)
+        {
+            this.logger = logger;
+        }
         static EncryptionService()
         {
             // Read the encryption key from the text file
@@ -20,6 +26,7 @@ namespace PassMngr.Services
 
         public string EncryptString(string plainText)
         {
+            logger.Log("EncryptionService: EncryptString");
             using (Aes aesAlg = Aes.Create())
             {
                 var myVal = Encoding.UTF8.GetBytes(EncryptKey);
@@ -45,6 +52,7 @@ namespace PassMngr.Services
 
         public string DecryptString(string cipherText)
         {
+            logger.Log("EncryptionService: DecryptString");
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
             using (Aes aesAlg = Aes.Create())
             {

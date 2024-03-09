@@ -2,12 +2,14 @@
 using PassMngr.Models;
 using static System.Net.Mime.MediaTypeNames;
 using PassMngr.DBContext;
+using Logger;
 
 namespace PassMngr.Repository
 {
     public class PasswordRepository : IRepository<Password>
     {
         private readonly ApplicationDbContext _context;
+        private readonly LoggerService logger;
 
         public PasswordRepository(ApplicationDbContext context)
         {
