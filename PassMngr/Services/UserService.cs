@@ -52,6 +52,14 @@ namespace PassMngr.Services
         public ActionResult<User> Create(User user)
         {
             logger.Log("UserService : HttpPost");
+
+            var myTest = repository.GetAll();
+            if (repository.GetAll().Any(u => u.email == user.email))
+            {
+                logger.Log("UserService : HttpPost : Email already exists");
+                return Conflict("Email already exists");
+            }
+
             user.id = repository.GetAll().Count() + 1;
             HashingService hashingService = new HashingService(logger);
             user.password = hashingService.HashString(hashingService.addPepper(user.password));
