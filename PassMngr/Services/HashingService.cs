@@ -4,6 +4,7 @@ using Logger;
 
 namespace PassMngr.Services
 {
+
     public class HashingService
     {
         private List<string> pepperList;
