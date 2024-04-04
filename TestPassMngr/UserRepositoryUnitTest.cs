@@ -154,7 +154,10 @@ namespace TestPassMngr
         [TestCleanup]
         public void TestCleanup()
         {
-            // Clean up the in-memory database after each test
+
+            _context.Users.RemoveRange(_context.Users);
+            _context.SaveChanges();
+            Assert.AreEqual(0, _context.Passwords.Count());
             _context.Dispose();
         }
     }

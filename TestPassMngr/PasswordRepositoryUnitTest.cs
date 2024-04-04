@@ -12,12 +12,15 @@ namespace TestPassMngr
     [TestClass]
     public class PasswordRepositoryTest
     {
+        //TestContext? testContext { get; set; }
+
         private ApplicationDbContext _context;
         private PasswordRepository _passwordRepository;
 
         [TestInitialize]
         public void TestInitializeF()
         {
+            //testContext.WriteLine("Start of TestInitializeF");
             //In-memory database for testing
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestPasswordDatabase")
@@ -25,18 +28,25 @@ namespace TestPassMngr
 
             _context = new ApplicationDbContext(options);
             _passwordRepository = new PasswordRepository(_context);
+            //testContext.WriteLine("Finish of TestInitializeF");
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
+            //testContext.WriteLine("Start of TestCleanup");
             // Clean up the in-memory database after each test
+            _context.Passwords.RemoveRange(_context.Passwords);
+            _context.SaveChanges();
+            Assert.AreEqual(0, _context.Passwords.Count());
             _context.Dispose();
+            //testContext.WriteLine("Finish of TestCleanup");
         }
 
         [TestMethod]
         public void TestAddPasswordAndGetById()
         {
+            //testContext.WriteLine("Start of TestAddPasswordAndGetById");
             Password password = new Password
             {
                 id = 1,
@@ -61,11 +71,13 @@ namespace TestPassMngr
             Assert.AreEqual(password.time_of_creation, retrievedPassword.time_of_creation);
             Assert.AreEqual(password.time_of_last_update, retrievedPassword.time_of_last_update);
             Assert.AreEqual(password.expiration_date, retrievedPassword.expiration_date);
+            //testContext.WriteLine("Finish of TestAddPasswordAndGetById");
         }
 
         [TestMethod]
         public void TestDeletePassword()
         {
+            //testContext.WriteLine("Start of TestDeletePassword");
             // Arrange
             Password password = new Password
             {
@@ -86,11 +98,13 @@ namespace TestPassMngr
 
             // Assert
             Assert.AreEqual (0, _passwordRepository.GetAll().Count());
+            //testContext.WriteLine("Finish of TestDeletePassword");
         }
 
         [TestMethod]
         public void TestUpdatePassword()
         {
+            //testContext.WriteLine("Start of TestUpdatePassword");
             // Arrange
             Password password = new Password
             {
@@ -115,11 +129,13 @@ namespace TestPassMngr
             // Assert
             Assert.IsNotNull(updatedPassword);
             Assert.AreEqual("updatedexample.com", updatedPassword.associated_website);
+            //testContext.WriteLine("Finish of TestUpdatePassword");
         }
 
         [TestMethod]
         public void TestGetAllPasswords()
         {
+            //testContext.WriteLine("Start of TestGetAllPasswords");
             // Arrange
             Password password1 = new Password
             {
@@ -153,6 +169,7 @@ namespace TestPassMngr
             Assert.AreEqual(2, allPasswords.Count);
             Assert.IsTrue(allPasswords.Any(p => p.id == 1));
             Assert.IsTrue(allPasswords.Any(p => p.id == 2));
+            //testContext.WriteLine("Finish of TestGetAllPasswords");
         }
     }
 }
