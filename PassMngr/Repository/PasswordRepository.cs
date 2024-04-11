@@ -44,7 +44,7 @@ namespace PassMngr.Repository
                 passToUpdate.password_value = entity.password_value != "" ? entity.password_value : passToUpdate.password_value;
                 passToUpdate.time_of_creation = entity.time_of_creation != "" ? entity.time_of_creation : passToUpdate.time_of_creation;
                 passToUpdate.time_of_last_update = entity.time_of_last_update != "" ? entity.time_of_last_update : passToUpdate.time_of_last_update;
-                passToUpdate.expiration_date = entity.expiration_date != "" ? entity.expiration_date : passToUpdate.expiration_date;
+                passToUpdate.months_until_expired = entity.months_until_expired != "" ? entity.months_until_expired : passToUpdate.months_until_expired;
                 _context.SaveChanges();
             }
         }

@@ -9,9 +9,9 @@
         public string password_value { get; set; }
         public string time_of_creation {  get; set; }
         public string time_of_last_update {  get; set; }
-        public string? expiration_date { get; set; }
+        public string months_until_expired { get; set; }
 
-        public Password(int id, int user_id, string associated_website, string associated_email, string password_value, string time_of_creation, string time_of_last_update, string? expiration_date)
+        public Password(int id, int user_id, string associated_website, string associated_email, string password_value, string time_of_creation, string time_of_last_update, string months_until_expired)
         {
             this.id = id;
             this.user_id = user_id;
@@ -20,7 +20,7 @@
             this.password_value = password_value;
             this.time_of_creation = time_of_creation;
             this.time_of_last_update = time_of_last_update;
-            this.expiration_date = expiration_date;
+            this.months_until_expired = months_until_expired;
         }
 
         public Password()
@@ -32,7 +32,7 @@
             this.password_value = "";
             this.time_of_creation = "";
             this.time_of_last_update = "";
-            this.expiration_date = "";
+            this.months_until_expired = "";
         }
     }
 }
