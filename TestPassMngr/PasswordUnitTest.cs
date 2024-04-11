@@ -26,7 +26,7 @@ namespace TestPassMngr
             Assert.AreEqual(password, newPassword.password_value);
             Assert.AreEqual(creationTime, newPassword.time_of_creation);
             Assert.AreEqual(updateTime, newPassword.time_of_last_update);
-            Assert.AreEqual(expirationDate, newPassword.expiration_date);
+            Assert.AreEqual(expirationDate, newPassword.months_until_expired);
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace TestPassMngr
             Assert.AreEqual("", defaultPassword.password_value);
             Assert.AreEqual("", defaultPassword.time_of_creation);
             Assert.AreEqual("", defaultPassword.time_of_last_update);
-            Assert.AreEqual("", defaultPassword.expiration_date);
+            Assert.AreEqual("", defaultPassword.months_until_expired);
         }
     }
 }

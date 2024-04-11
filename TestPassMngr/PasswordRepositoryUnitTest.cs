@@ -56,7 +56,7 @@ namespace TestPassMngr
                 password_value = "password123",
                 time_of_creation = "12-02-2023",
                 time_of_last_update = "12-02-2023",
-                expiration_date = "12-03-2023"
+                months_until_expired = "12-03-2023"
             };
             _passwordRepository.Add(password);
             Password retrievedPassword = _passwordRepository.GetById(1);
@@ -70,7 +70,7 @@ namespace TestPassMngr
             Assert.AreEqual(password.password_value, retrievedPassword.password_value);
             Assert.AreEqual(password.time_of_creation, retrievedPassword.time_of_creation);
             Assert.AreEqual(password.time_of_last_update, retrievedPassword.time_of_last_update);
-            Assert.AreEqual(password.expiration_date, retrievedPassword.expiration_date);
+            Assert.AreEqual(password.months_until_expired, retrievedPassword.months_until_expired);
             //testContext.WriteLine("Finish of TestAddPasswordAndGetById");
         }
 
@@ -88,7 +88,7 @@ namespace TestPassMngr
                 password_value = "password123",
                 time_of_creation = "12-02-2023",
                 time_of_last_update = "12-02-2023",
-                expiration_date = "12-03-2023"
+                months_until_expired = "12-03-2023"
             };
             _passwordRepository.Add(password);
             Assert.AreEqual(1, _passwordRepository.GetAll().Count());
@@ -115,7 +115,7 @@ namespace TestPassMngr
                 password_value = "password123",
                 time_of_creation = "12-02-2023",
                 time_of_last_update = "12-02-2023",
-                expiration_date = "12-03-2023"
+                months_until_expired = "12-03-2023"
             };
             _passwordRepository.Add(password);
 
@@ -146,7 +146,7 @@ namespace TestPassMngr
                 password_value = "password123",
                 time_of_creation = "12-02-2023",
                 time_of_last_update = "12-02-2023",
-                expiration_date = "12-03-2023"
+                months_until_expired = "12-03-2023"
             };
             Password password2 = new Password
             {
@@ -157,7 +157,7 @@ namespace TestPassMngr
                 password_value = "password456",
                 time_of_creation = "12-02-2023",
                 time_of_last_update = "12-02-2023",
-                expiration_date = "12-03-2023"
+                months_until_expired = "12-03-2023"
             };
             _passwordRepository.Add(password1);
             _passwordRepository.Add(password2);

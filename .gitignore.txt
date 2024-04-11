@@ -1,8 +1,0 @@
-﻿SSL_Certificates/*
-appsettings.json
-appsettings.Development.json
-bin/*
-obj/*
-*.csproj
-*.user
-Migrations/
