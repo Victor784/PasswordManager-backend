@@ -117,7 +117,8 @@ namespace PassMngr.Services
                 if(userId != null)
                 {
                     logger.Log("UserService : HttpPost/auth : User is authenticated");
-                    return Ok(new { Message = "Authentication successful", UserId = userId });
+                    string token  = TokenGenerator.GenerateToken(userId, model.Email);
+                    return Ok(new { Message = "Authentication successful", UserId = userId , token });
                 }
                 else
                 {
@@ -131,6 +132,54 @@ namespace PassMngr.Services
                 logger.Log("UserService : HttpPost/auth : User is not authenticated - invalid email or password");
                 return Unauthorized(new { Message = "Invalid email or password" });
             }
+        }
+
+        [HttpPost("authToken")]
+        [EnableCors("PassMngrPolicy")]
+        public async Task<IActionResult> AuthenticateAsyncUsingToken([FromBody] LoginRequestWithToken model)
+        {
+            logger.Log("UserService : HttpPost/authToken");
+            if (!ModelState.IsValid)
+            {
+                logger.Log("UserService : HttpPost/authToken : Invalid JSON body format");
+                return BadRequest(ModelState);
+            }
+            var result = await AuthenticateUserAsyncWithToken(model.Token);
+
+            if (result.userIsAuthenticated)
+            {
+                int userId = repository.getByEmail(result.emailOfUser).id;
+                if (userId != null)
+                {
+                    logger.Log("UserService : HttpPost/authToken : User is authenticated");
+                    return Ok(new { Message = "Authentication successful", UserId = userId });
+                }
+                else
+                {
+                    logger.Log("UserService : HttpPost/authToken : User is authenticated but user id not found in DB");
+                    return BadRequest(new { Message = "Authentication failed" });
+                }
+
+            }
+            else
+            {
+                logger.Log("UserService : HttpPost/auth : User is not authenticated - invalid email or password");
+                return Unauthorized(new { Message = "Invalid token" });
+            }
+        }
+
+        [HttpGet("tokens/{id}")]
+        [EnableCors("PassMngrPolicy")]
+        public ActionResult<string> getToken(int id)
+        {
+            logger.Log("UserService : HttpGet(id)");
+            var user = repository.GetById(id);
+            if (user == null)
+            {
+                logger.Log("UserService : HttpGet(id) : User not found");
+                return NotFound();
+            }
+            return TokenGenerator.GenerateToken(user.id, user.email);
         }
 
         private async Task<bool> AuthenticateUserAsync(string email, string password)
@@ -157,7 +206,25 @@ namespace PassMngr.Services
             return false;
         }
 
+        private async Task<(bool userIsAuthenticated, string emailOfUser)> AuthenticateUserAsyncWithToken(string token)
+        {
+            logger.Log("UserService : HttpPost/authToken : AuthenticateUserAsyncWithToken");
+
+            var matchesDBEntry = await userManager.MatchDBEntry(token, repository.GetAll());
+            if (matchesDBEntry.entryFound)
+            {
+                logger.Log("UserService : HttpPost/auth : AuthenticateUserAsync : Authentication successfull");
+            }
+            else
+            {
+                logger.Log("UserService : HttpPost/auth : AuthenticateUserAsync : Authentication NOT successfull");
+            }
+            return matchesDBEntry;
+
+
         }
+
+    }
     public class LoginRequest
     {
         [Required(ErrorMessage = "Email is required")]
@@ -167,4 +234,12 @@ namespace PassMngr.Services
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
+
+    public class LoginRequestWithToken
+    {
+        [Required(ErrorMessage = "Token is required")]     
+        public string Token { get; set; }
+    }
+
+    
 }

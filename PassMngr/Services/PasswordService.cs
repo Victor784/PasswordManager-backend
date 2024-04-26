@@ -51,12 +51,12 @@ namespace PassMngr.Services
         public ActionResult<Password> Create(Password pass)
         {
             logger.Log("PasswordService : HttpPost");
-            pass.id = repository.GetAll().Count() + 1;
+            //pass.id = repository.GetAll().Count() + 1;
             EncryptionService encryptService = new EncryptionService(logger);
             pass.password_value = encryptService.EncryptString(pass.password_value);
             repository.Add(pass);
 
-            return CreatedAtAction(nameof(GetById), new { id = pass.id }, pass);
+            return CreatedAtAction(nameof(GetById), new { id = pass.id });
         }
 
         [HttpPut("{id}")]
